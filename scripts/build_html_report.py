@@ -11,6 +11,7 @@ from pathlib import Path
 import pandas as pd
 import plotly.graph_objects as go
 import plotly.io as pio
+from plotly.offline import get_plotlyjs
 
 from data_prep import load_enriched_passes, team_summary
 
@@ -393,7 +394,7 @@ def build_report():
     html = HTML_TEMPLATE.format(
         kpi_html=kpi_html, table_rows=table_rows,
         cross_records_json=cross_records_json, pass_agg_json=pass_agg_json, orders_json=orders_json,
-        coach_summaries_json=coach_summaries_json, league_json=league_json,
+        coach_summaries_json=coach_summaries_json, league_json=league_json, plotlyjs_source=get_plotlyjs(),
         **slicer_html, **plots_html,
     )
     OUT_FILE.write_text(html, encoding="utf-8")
@@ -407,7 +408,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 <meta charset="UTF-8">
 <title>Euro 2024 — Cross &amp; Passing Intelligence Report</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+<script>{plotlyjs_source}</script>
 <style>
   :root {{
     --navy: #1B2A4A; --ink: #1D1D1F; --muted: #6E6E73; --blue: #0071E3;
